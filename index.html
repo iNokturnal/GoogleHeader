@@ -7,43 +7,36 @@
 <style>
   :root { --video-max: 480px; }
 
-  html,body { margin:0; padding:0; }
-  body {
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-    background:#fff;
-    display:flex;
-    justify-content:center;
-  }
-
-  .page {
-    width:100%;
-    max-width: calc(var(--video-max) + 520px); /* more room for bigger images */
-    padding:20px;
-    box-sizing:border-box;
-    margin:0 auto;
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    overflow: hidden; /* No scrolling */
   }
 
   .hero-wrap {
-    display:grid;
-    grid-template-columns: 1fr minmax(auto, var(--video-max)) 1fr;
-    gap:24px;
-    align-items:center;
+    display: grid;
+    grid-template-columns: auto minmax(auto, var(--video-max)) auto;
+    gap: 24px;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* fills iframe height without extra space */
   }
 
   .side img {
     max-width: 100%;
     height: auto;
     display: block;
-    transform: scale(1.25); /* images are now 25% larger */
+    transform: scale(1.25); /* Larger images */
   }
 
   .video {
     position: relative;
     width: 100%;
     max-width: var(--video-max);
-    padding-top: 56.25%;
-    margin: 0 auto;
+    padding-top: 56.25%; /* 16:9 ratio */
   }
+
   .video iframe {
     position: absolute;
     inset: 0;
@@ -52,33 +45,35 @@
     border: 0;
   }
 
-  @media (max-width: 900px){
-    .side{ display:none; }
-    .hero-wrap{ grid-template-columns: 1fr; }
-    .video{ max-width:100%; }
-    .page{ max-width: 680px; }
+  @media (max-width: 900px) {
+    .side { display: none; }
+    .hero-wrap {
+      grid-template-columns: 1fr;
+      height: auto;
+    }
+    .video { max-width: 100%; }
   }
 </style>
 </head>
 <body>
-  <div class="page">
-    <div class="hero-wrap">
-      <div class="side">
-        <img src="https://i.imgur.com/ET2Jo56.png" alt="Left image">
-      </div>
 
-      <div class="video">
-        <iframe
-          src="https://www.youtube.com/embed/Rwz9BgzH1sg?start=2"
-          title="Intro video"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen></iframe>
-      </div>
-
-      <div class="side">
-        <img src="https://i.imgur.com/8tGUH1l.png" alt="Right image">
-      </div>
-    </div>
+<div class="hero-wrap">
+  <div class="side">
+    <img src="https://i.imgur.com/ET2Jo56.png" alt="Left image">
   </div>
+
+  <div class="video">
+    <iframe
+      src="https://www.youtube.com/embed/Rwz9BgzH1sg?start=2"
+      title="Intro video"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen></iframe>
+  </div>
+
+  <div class="side">
+    <img src="https://i.imgur.com/8tGUH1l.png" alt="Right image">
+  </div>
+</div>
+
 </body>
 </html>
