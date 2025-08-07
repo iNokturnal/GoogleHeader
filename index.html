@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Video with Side Images</title>
 <style>
-  :root { --video-max: 520px; }
+  :root { --video-max: 480px; }
 
   html,body { margin:0; padding:0; }
   body {
@@ -17,7 +17,7 @@
 
   .page {
     width:100%;
-    max-width: calc(var(--video-max) + 500px); /* more room for bigger images */
+    max-width: calc(var(--video-max) + 520px); /* more room for bigger images */
     padding:20px;
     box-sizing:border-box;
     margin:0 auto;
@@ -34,7 +34,7 @@
     max-width: 100%;
     height: auto;
     display: block;
-    transform: scale(1.15); /* makes images about 15% bigger */
+    transform: scale(1.25); /* images are now 25% larger */
   }
 
   .video {
