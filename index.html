@@ -20,14 +20,12 @@
     gap: 24px;
     align-items: center;
     justify-content: center;
-    height: 100vh; /* fills iframe height without extra space */
   }
 
   .side img {
-    max-width: 100%;
-    height: auto;
+    height: calc(var(--video-max) * 0.5625); /* match 16:9 video height */
+    width: auto;
     display: block;
-    transform: scale(1.1); /* only 10% bigger now */
   }
 
   .video {
@@ -47,10 +45,7 @@
 
   @media (max-width: 900px) {
     .side { display: none; }
-    .hero-wrap {
-      grid-template-columns: 1fr;
-      height: auto;
-    }
+    .hero-wrap { grid-template-columns: 1fr; }
     .video { max-width: 100%; }
   }
 </style>
