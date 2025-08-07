@@ -5,17 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Video with Side Images</title>
 <style>
-  /* Tweak these if needed */
-  :root {
-    --video-max: 480px;     /* desktop max width of video */
-    --header-offset: 28px;  /* how far to nudge video down on mobile */
-  }
+  :root { --video-max: 480px; } /* adjust if you want 460/500/560 */
 
   html, body {
-    margin: 0;
-    padding: 0;
-    background: transparent;
-    overflow: hidden; /* never show scrollbars inside the embed */
+    margin: 0; padding: 0; background: transparent;
+    overflow: hidden; /* no inner scroll on desktop */
     font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   }
 
@@ -23,68 +17,38 @@
     display: grid;
     grid-template-columns: auto minmax(auto, var(--video-max)) auto;
     gap: 24px;
-    align-items: center;
-    justify-content: center;
+    align-items: center; justify-content: center;
   }
 
-  /* Side images match the video height (16:9) on desktop */
+  /* Side images match video height (16:9) on desktop */
   .side img{
     height: calc(var(--video-max) * 0.5625);
-    width: auto;
-    display: block;
+    width: auto; display: block;
   }
 
-  /* Desktop video (16:9) */
+  /* Responsive 16:9 video */
   .video{
-    position: relative;
-    width: 100%;
-    max-width: var(--video-max);
-    padding-top: 56.25%; /* 16:9 */
-    margin: 0 auto;
-    overflow: hidden;    /* allow inner offset on mobile without adding height */
+    position: relative; width: 100%; max-width: var(--video-max);
+    padding-top: 56.25%; margin: 0 auto;
   }
   .video iframe{
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
+    position: absolute; inset: 0; width: 100%; height: 100%; border: 0;
   }
 
-  /* ---------- Mobile ---------- */
+  /* Mobile: hide side images, make video full width */
   @media (max-width: 900px){
     .side{ display:none; }
-
-    .hero-wrap{
-      grid-template-columns: 1fr;
-      gap: 0;
-      margin: 0;
-      padding: 0;
-    }
-
-    /* Keep the SAME outer height (56.25vw) but nudge the iframe DOWN
-       so the Sites sticky header doesn't cover it — no added scroll. */
-    .video{
-      max-width: none;
-      width: 100vw;
-      padding-top: 56.25vw;  /* maintain 16:9 container height */
-      margin: 0;
-      overflow: hidden;
-    }
-    .video iframe{
-      top: var(--header-offset);                    /* shift down */
-      height: calc(100% + var(--header-offset));    /* fill after shift */
-    }
+    .hero-wrap{ grid-template-columns: 1fr; gap: 0; }
+    .video{ max-width:none; width:100vw; padding-top:56.25vw; margin:0; }
+    html, body{ overflow:auto; } /* allow normal page scroll on the page */
   }
 </style>
 </head>
 <body>
-
   <div class="hero-wrap">
     <div class="side">
       <img src="https://i.imgur.com/ET2Jo56.png" alt="Left image">
     </div>
-
     <div class="video">
       <iframe
         src="https://www.youtube.com/embed/Rwz9BgzH1sg?start=2"
@@ -92,11 +56,9 @@
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowfullscreen></iframe>
     </div>
-
     <div class="side">
       <img src="https://i.imgur.com/8tGUH1l.png" alt="Right image">
     </div>
   </div>
-
 </body>
 </html>
