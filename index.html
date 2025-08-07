@@ -5,12 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Video with Side Images</title>
 <style>
-  :root { --video-max: 480px; } /* adjust if you want 460/500/560 */
+  :root {
+    --video-max: 480px;  /* desktop video width */
+  }
 
   html, body {
     margin: 0; padding: 0; background: transparent;
-    overflow: hidden; /* no inner scroll on desktop */
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    overflow: hidden; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   }
 
   .hero-wrap{
@@ -20,35 +21,48 @@
     align-items: center; justify-content: center;
   }
 
-  /* Side images match video height (16:9) on desktop */
+  /* Side images match 16:9 video height on desktop */
   .side img{
     height: calc(var(--video-max) * 0.5625);
     width: auto; display: block;
   }
 
-  /* Responsive 16:9 video */
+  /* Desktop video (16:9) */
   .video{
     position: relative; width: 100%; max-width: var(--video-max);
-    padding-top: 56.25%; margin: 0 auto;
+    padding-top: 56.25%; margin: 0 auto; overflow: hidden;
   }
   .video iframe{
     position: absolute; inset: 0; width: 100%; height: 100%; border: 0;
   }
 
-  /* Mobile: hide side images, make video full width */
+  /* -------- Mobile fix: shift video down without changing total height -------- */
   @media (max-width: 900px){
+    :root { --offset: 44px; }          /* tweak this (40–56px) if needed */
+
     .side{ display:none; }
     .hero-wrap{ grid-template-columns: 1fr; gap: 0; }
-    .video{ max-width:none; width:100vw; padding-top:56.25vw; margin:0; }
-    html, body{ overflow:auto; } /* allow normal page scroll on the page */
+
+    /* Total height stays 56.25vw because margin-top + padding-top = 56.25vw */
+    .video{
+      max-width: none;
+      width: 100vw;
+      margin: 0;                       /* reset */
+      margin-top: var(--offset);       /* add blank space under the sticky header */
+      padding-top: calc(56.25vw - var(--offset)); /* subtract same amount from height */
+    }
+    .video iframe{ inset: 0; }         /* fill container */
+    html, body{ overflow: hidden; }    /* no inner scroll */
   }
 </style>
 </head>
 <body>
+
   <div class="hero-wrap">
     <div class="side">
       <img src="https://i.imgur.com/ET2Jo56.png" alt="Left image">
     </div>
+
     <div class="video">
       <iframe
         src="https://www.youtube.com/embed/Rwz9BgzH1sg?start=2"
@@ -56,9 +70,11 @@
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowfullscreen></iframe>
     </div>
+
     <div class="side">
       <img src="https://i.imgur.com/8tGUH1l.png" alt="Right image">
     </div>
   </div>
+
 </body>
 </html>
