@@ -1,41 +1,45 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Video with Side Images</title>
 <style>
-  :root { --video-max: 480px; }
+  /* --- Tweak this if you want the desktop video wider/narrower --- */
+  :root { --video-max: 480px; } /* 520 or 560 are also nice */
 
   html, body {
     margin: 0;
     padding: 0;
     background: transparent;
-    overflow: hidden; /* No scrolling */
+    overflow: hidden; /* no extra scroll inside the embed on desktop */
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   }
 
-  .hero-wrap {
+  .hero-wrap{
     display: grid;
     grid-template-columns: auto minmax(auto, var(--video-max)) auto;
     gap: 24px;
-    align-items: center;
+    align-items: center;    /* vertically center images with video */
     justify-content: center;
   }
 
-  .side img {
-    height: calc(var(--video-max) * 0.5625); /* match 16:9 video height */
+  /* Side images: lock their height to the 16:9 video’s height */
+  .side img{
+    height: calc(var(--video-max) * 0.5625); /* 0.5625 = 9/16 */
     width: auto;
     display: block;
   }
 
-  .video {
+  /* Responsive 16:9 video with a hard max width on desktop */
+  .video{
     position: relative;
     width: 100%;
     max-width: var(--video-max);
     padding-top: 56.25%; /* 16:9 ratio */
+    margin: 0 auto;
   }
-
-  .video iframe {
+  .video iframe{
     position: absolute;
     inset: 0;
     width: 100%;
@@ -43,32 +47,46 @@
     border: 0;
   }
 
-  @media (max-width: 900px) {
-    .side { display: none; }
-    .hero-wrap { grid-template-columns: 1fr; }
-    .video { max-width: 100%; }
+  /* -------- Mobile: hide side images, let video be full-width -------- */
+  @media (max-width: 900px){
+    .side{ display: none; }
+    .hero-wrap{
+      grid-template-columns: 1fr;
+      gap: 0;
+      padding: 0;
+      margin: 0;
+    }
+    .video{
+      max-width: none;
+      width: 100vw;          /* edge-to-edge video */
+      padding-top: 56.25vw;  /* maintain 16:9 using viewport width */
+      margin: 0;
+    }
+    html, body{
+      overflow: auto;        /* allow normal page scroll in Sites */
+    }
   }
 </style>
 </head>
 <body>
 
-<div class="hero-wrap">
-  <div class="side">
-    <img src="https://i.imgur.com/ET2Jo56.png" alt="Left image">
-  </div>
+  <div class="hero-wrap">
+    <div class="side">
+      <img src="https://i.imgur.com/ET2Jo56.png" alt="Left image">
+    </div>
 
-  <div class="video">
-    <iframe
-      src="https://www.youtube.com/embed/Rwz9BgzH1sg?start=2"
-      title="Intro video"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      allowfullscreen></iframe>
-  </div>
+    <div class="video">
+      <iframe
+        src="https://www.youtube.com/embed/Rwz9BgzH1sg?start=2"
+        title="Intro video"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen></iframe>
+    </div>
 
-  <div class="side">
-    <img src="https://i.imgur.com/8tGUH1l.png" alt="Right image">
+    <div class="side">
+      <img src="https://i.imgur.com/8tGUH1l.png" alt="Right image">
+    </div>
   </div>
-</div>
 
 </body>
 </html>
