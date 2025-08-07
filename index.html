@@ -5,14 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Video with Side Images</title>
 <style>
-  /* Desktop video width – tweak if you want (e.g., 460, 500, 560) */
-  :root { --video-max: 480px; }
+  /* Tweak these if needed */
+  :root {
+    --video-max: 480px;     /* desktop max width of video */
+    --header-offset: 28px;  /* how far to nudge video down on mobile */
+  }
 
   html, body {
     margin: 0;
     padding: 0;
     background: transparent;
-    overflow: hidden; /* no scroll inside the embed on desktop */
+    overflow: hidden; /* never show scrollbars inside the embed */
     font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   }
 
@@ -20,24 +23,25 @@
     display: grid;
     grid-template-columns: auto minmax(auto, var(--video-max)) auto;
     gap: 24px;
-    align-items: center;    /* vertically center images with video */
+    align-items: center;
     justify-content: center;
   }
 
-  /* Side images: lock their height to the 16:9 video’s height */
+  /* Side images match the video height (16:9) on desktop */
   .side img{
-    height: calc(var(--video-max) * 0.5625); /* 0.5625 = 9/16 */
+    height: calc(var(--video-max) * 0.5625);
     width: auto;
     display: block;
   }
 
-  /* Responsive 16:9 video with a hard max width on desktop */
+  /* Desktop video (16:9) */
   .video{
     position: relative;
     width: 100%;
     max-width: var(--video-max);
-    padding-top: 56.25%; /* 16:9 ratio */
+    padding-top: 56.25%; /* 16:9 */
     margin: 0 auto;
+    overflow: hidden;    /* allow inner offset on mobile without adding height */
   }
   .video iframe{
     position: absolute;
@@ -47,25 +51,29 @@
     border: 0;
   }
 
-  /* -------- Mobile: hide side images, full-width video, + top padding -------- */
+  /* ---------- Mobile ---------- */
   @media (max-width: 900px){
-    .side{ display: none; }
+    .side{ display:none; }
+
     .hero-wrap{
       grid-template-columns: 1fr;
       gap: 0;
-      padding: 0;
       margin: 0;
-      /* push content below Google Sites’ sticky header (with iOS safe area) */
-      padding-top: calc(24px + env(safe-area-inset-top, 0px));
+      padding: 0;
     }
+
+    /* Keep the SAME outer height (56.25vw) but nudge the iframe DOWN
+       so the Sites sticky header doesn't cover it — no added scroll. */
     .video{
       max-width: none;
-      width: 100vw;          /* edge-to-edge */
-      padding-top: 56.25vw;  /* keep 16:9 using viewport width */
+      width: 100vw;
+      padding-top: 56.25vw;  /* maintain 16:9 container height */
       margin: 0;
+      overflow: hidden;
     }
-    html, body{
-      overflow: auto;        /* allow normal page scroll in Sites on mobile */
+    .video iframe{
+      top: var(--header-offset);                    /* shift down */
+      height: calc(100% + var(--header-offset));    /* fill after shift */
     }
   }
 </style>
