@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Video with Side Images</title>
 <style>
-  /* --- Tweak this if you want the desktop video wider/narrower --- */
-  :root { --video-max: 480px; } /* 520 or 560 are also nice */
+  /* Desktop video width – tweak if you want (e.g., 460, 500, 560) */
+  :root { --video-max: 480px; }
 
   html, body {
     margin: 0;
     padding: 0;
     background: transparent;
-    overflow: hidden; /* no extra scroll inside the embed on desktop */
+    overflow: hidden; /* no scroll inside the embed on desktop */
     font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   }
 
@@ -47,7 +47,7 @@
     border: 0;
   }
 
-  /* -------- Mobile: hide side images, let video be full-width -------- */
+  /* -------- Mobile: hide side images, full-width video, + top padding -------- */
   @media (max-width: 900px){
     .side{ display: none; }
     .hero-wrap{
@@ -55,15 +55,17 @@
       gap: 0;
       padding: 0;
       margin: 0;
+      /* push content below Google Sites’ sticky header (with iOS safe area) */
+      padding-top: calc(24px + env(safe-area-inset-top, 0px));
     }
     .video{
       max-width: none;
-      width: 100vw;          /* edge-to-edge video */
-      padding-top: 56.25vw;  /* maintain 16:9 using viewport width */
+      width: 100vw;          /* edge-to-edge */
+      padding-top: 56.25vw;  /* keep 16:9 using viewport width */
       margin: 0;
     }
     html, body{
-      overflow: auto;        /* allow normal page scroll in Sites */
+      overflow: auto;        /* allow normal page scroll in Sites on mobile */
     }
   }
 </style>
