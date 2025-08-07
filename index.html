@@ -5,45 +5,65 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Video with Side Images</title>
 <style>
-  :root { --video-max: 480px; } /* tweak if you want 460/500/560 */
+  :root{
+    --video-max: 480px;   /* desktop video width */
+    /* MOBILE TUNING — if top is still cropped, increase offset a bit or lower scale a hair */
+    --mobile-offset: 40px; /* how far to push video DOWN on mobile (30–56px usually) */
+    --mobile-scale: 0.92;  /* shrink a bit so bottom doesn't get cut (0.88–0.96) */
+  }
 
   html, body { margin:0; padding:0; background:transparent; overflow:hidden; font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
 
   .hero-wrap{
     display:grid;
     grid-template-columns:auto minmax(auto, var(--video-max)) auto;
-    gap:24px;
-    align-items:center;
-    justify-content:center;
+    gap:24px; align-items:center; justify-content:center;
   }
 
-  /* Side images match video height (16:9) */
+  /* Side images match 16:9 video height on desktop */
   .side img{
     height: calc(var(--video-max) * 0.5625);
     width:auto; display:block;
   }
 
-  /* Video container: use aspect-ratio for a solid 16:9 */
+  /* Video container */
   .video{
     width:100%;
     max-width:var(--video-max);
     aspect-ratio:16 / 9;
     position:relative;
     margin:0 auto;
-    overflow:hidden;
+    overflow:hidden; /* important for mobile transform trick */
+    background: transparent;
   }
   .video iframe{
     position:absolute; inset:0;
     width:100%; height:100%;
     border:0;
+    transform:none;
   }
 
-  /* Mobile: hide side images, full-width video */
-  @media (max-width:900px){
+  /* ---------- Mobile: hide side images, full width, anti-crop transform ---------- */
+  @media (max-width: 900px){
     .side{ display:none; }
     .hero-wrap{ grid-template-columns:1fr; gap:0; }
-    .video{ max-width:none; width:100vw; aspect-ratio:16/9; margin:0; }
-    html, body{ overflow:auto; }
+
+    .video{
+      max-width:none; width:100vw; aspect-ratio:16 / 9; margin:0;
+    }
+    .video iframe{
+      /* Move the player down and shrink it a touch so NOTHING is cropped */
+      transform: translateY(var(--mobile-offset)) scale(var(--mobile-scale));
+      transform-origin: top center;
+      /* Make the inner box taller so scaling + translate doesn't reveal edges */
+      height: calc(100% + var(--mobile-offset) * 2);
+      width: calc(100% / var(--mobile-scale));
+      left: 50%;
+      transform-origin: top center;
+      translate: -50% 0; /* recenters after width change */
+    }
+
+    html, body{ overflow:hidden; } /* keep the embed itself scroll-free */
   }
 </style>
 </head>
@@ -51,7 +71,9 @@
   <div class="hero-wrap">
     <div class="side"><img src="https://i.imgur.com/ET2Jo56.png" alt="Left"></div>
     <div class="video">
-      <iframe src="https://www.youtube.com/embed/Rwz9BgzH1sg?start=2" title="Intro" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      <iframe src="https://www.youtube.com/embed/Rwz9BgzH1sg?start=2"
+              title="Intro" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen></iframe>
     </div>
     <div class="side"><img src="https://i.imgur.com/8tGUH1l.png" alt="Right"></div>
   </div>
